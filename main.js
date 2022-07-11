@@ -25,6 +25,12 @@ const stratRoute = require('./routes/strat')
 app.use("/strat", stratRoute)
 
 app.use(express.static('public'));
+
+//on / serve index.html
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html')
+})
+
 app.listen(port, () => {
 
     console.log(`Example app listening on port ${port}`)
