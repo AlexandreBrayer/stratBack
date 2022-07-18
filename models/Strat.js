@@ -10,6 +10,10 @@ const StratModel = mongoose.Schema({
         type: String,
         required: true
     },
+    vars: {
+        type: Object,
+        default: {}
+    },
     upvotes: {
         type: Number,
         default: 0

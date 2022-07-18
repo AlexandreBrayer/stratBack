@@ -3,6 +3,15 @@ const router = express.Router();
 const Strat = require("../models/Strat");
 const User = require("../models/Users");
 
+function populateVars(strat) {
+    let description = strat.description;
+    for (let varName in strat.vars) {
+        let randomValue = strat.vars[varName][Math.floor(Math.random() * strat.vars[varName].length)];
+        description = description.replace(varName, randomValue);
+    }
+    return description
+}
+
 router.get("/", async(req, res) => {
     try {
         const strat = await Strat.find();
@@ -17,6 +26,9 @@ router.get("/roll", async(req, res) => {
     try {
         const strat = await Strat.find();
         const random = Math.floor(Math.random() * strat.length);
+        if (strat[random].vars != {}) {
+            strat[random].description = populateVars(strat[random]);
+        }
         res.status(200).send(strat[random]);
     } catch (err) {
         res.status(400).send(err);
