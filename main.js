@@ -4,6 +4,7 @@ database.connect()
 const bodyParser = require("body-parser")
 const express = require('express')
 const cors = require('cors');
+const path = require('path')
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -26,10 +27,10 @@ app.use("/strat", stratRoute)
 
 app.use(express.static('public'));
 
-//on / serve index.html
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
-})
+app.route('/*')
+    .get(function(req, res) {
+        res.sendFile(path.join(__dirname + '/public/index.html'));
+    });
 
 app.listen(port, () => {
 
