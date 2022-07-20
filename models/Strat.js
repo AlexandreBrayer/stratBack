@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require('bson');
 
 const StratModel = mongoose.Schema({
     name: {
@@ -21,7 +22,19 @@ const StratModel = mongoose.Schema({
     downvotes: {
         type: Number,
         default: 0
-    }
+    },
+    createdBy: {
+        type: ObjectId,
+        ref: 'User'
+    },
+    upVoters: [{
+        type: ObjectId,
+        ref: 'User'
+    }],
+    downVoters: [{
+        type: ObjectId,
+        ref: 'User'
+    }]
 }).set('toJSON', {
     virtuals: true
 });

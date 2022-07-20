@@ -55,7 +55,7 @@ router.post("/", async(req, res) => {
     }
 })
 
-router.post("/vote", async(req, res) => {
+router.post("/upvote", async(req, res) => {
     const token = req.headers.authorization;
     const user = await User.findOne({
         token
@@ -66,17 +66,52 @@ router.post("/vote", async(req, res) => {
         });
         return
     }
-    const {
-        vote,
-        stratId
-    } = req.body;
+    const strat = await Strat.findById(req.body.id);
+    if (strat.upVoters.includes(user._id)) {
+        res.status(200).send({
+            message: "Same vote"
+        });
+        return
+    }
+    if (strat.downVoters.includes(user._id)) {
+        strat.downVoters.splice(strat.downVoters.indexOf(user._id), 1);
+        strat.downvotes--;
+    }
+    strat.upVoters.push(user._id);
+    strat.upvotes++;
     try {
-        const strat = await Strat.findById(stratId);
-        if (vote === "up") {
-            strat.upvotes++;
-        } else {
-            strat.downvotes++;
-        }
+        await strat.save();
+        res.status(200).send(strat);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
+
+router.post("/downvote", async(req, res) => {
+    const token = req.headers.authorization;
+    const user = await User.findOne({
+        token
+    });
+    if (!user) {
+        res.status(401).send({
+            message: "You are not logged in"
+        });
+        return
+    }
+    const strat = await Strat.findById(req.body.id);
+    if (strat.downVoters.includes(user._id)) {
+        res.status(200).send({
+            message: "Same vote"
+        });
+        return
+    }
+    if (strat.upVoters.includes(user._id)) {
+        strat.upVoters.splice(strat.upVoters.indexOf(user._id), 1);
+        strat.upvotes--;
+    }
+    strat.downVoters.push(user._id);
+    strat.downvotes++;
+    try {
         await strat.save();
         res.status(200).send(strat);
     } catch (err) {
