@@ -6,7 +6,15 @@ var sha256 = require('js-sha256');
 function genToken() {
     return Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
 }
-
+router.get("/", async(req, res) => {
+    const token = req.headers.authorization;
+    try {
+        const user = await User.findOne({ token: token });
+        res.status(200).send(user);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
 router.post("/", async(req, res) => {
     const {
         login,
@@ -32,12 +40,7 @@ router.post("/", async(req, res) => {
                     user.token = token;
                     await user.save();
                 }
-                const myToken = user.token;
-                const name = user.name;
-                res.status(200).send({
-                    token: myToken,
-                    name: name
-                });
+                res.status(200).send(user);
             } else {
                 res.status(400).send({
                     message: "Wrong password"
