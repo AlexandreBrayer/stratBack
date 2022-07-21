@@ -21,6 +21,7 @@ router.get("/", async(req, res) => {
     }
 });
 
+
 router.get("/roll", async(req, res) => {
     //send a random strat from the database
     try {
@@ -30,6 +31,16 @@ router.get("/roll", async(req, res) => {
             strat[random].description = populateVars(strat[random]);
         }
         res.status(200).send(strat[random]);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
+
+router.get("/:id", async(req, res) => {
+    console.log(req.params.id);
+    try {
+        const strat = await Strat.findById(req.params.id);
+        res.status(200).send(strat);
     } catch (err) {
         res.status(400).send(err);
     }
