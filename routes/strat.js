@@ -79,9 +79,14 @@ router.post("/upvote", async(req, res) => {
     }
     const strat = await Strat.findById(req.body.id);
     if (strat.upVoters.includes(user._id)) {
-        res.status(200).send({
-            message: "Same vote"
-        });
+        strat.upVoters.splice(strat.upVoters.indexOf(user._id), 1);
+        strat.upvotes--;
+        try {
+            await strat.save();
+            res.status(200).send(strat);
+        } catch (err) {
+            res.status(400).send(err);
+        }
         return
     }
     if (strat.downVoters.includes(user._id)) {
@@ -111,9 +116,14 @@ router.post("/downvote", async(req, res) => {
     }
     const strat = await Strat.findById(req.body.id);
     if (strat.downVoters.includes(user._id)) {
-        res.status(200).send({
-            message: "Same vote"
-        });
+        strat.downVoters.splice(strat.downVoters.indexOf(user._id), 1);
+        strat.downvotes--;
+        try {
+            await strat.save();
+            res.status(200).send(strat);
+        } catch (err) {
+            res.status(400).send(err);
+        }
         return
     }
     if (strat.upVoters.includes(user._id)) {
