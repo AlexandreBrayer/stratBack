@@ -34,7 +34,12 @@ const StratModel = mongoose.Schema({
     downVoters: [{
         type: ObjectId,
         ref: 'User'
-    }]
+    }],
+    side: {
+        type: String,
+        default: 'none',
+        required: true
+    }
 }).set('toJSON', {
     virtuals: true
 });

@@ -15,6 +15,16 @@ function populateVars(strat) {
 router.get("/", async(req, res) => {
     try {
         const strat = await Strat.find();
+        //if there is strats without side, then set side to none
+        for (let i = 0; i < strat.length; i++) {
+            if (!strat[i].side) {
+                strat[i].side = "none";
+            }
+        }
+        //save strats
+        for (let i = 0; i < strat.length; i++) {
+            await strat[i].save();
+        }
         res.status(200).send(strat);
     } catch (err) {
         res.status(400).send(err);
@@ -26,6 +36,27 @@ router.get("/roll", async(req, res) => {
     //send a random strat from the database
     try {
         const strat = await Strat.find();
+        const random = Math.floor(Math.random() * strat.length);
+        if (strat[random].vars != {}) {
+            strat[random].description = populateVars(strat[random]);
+        }
+        res.status(200).send(strat[random]);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
+
+router.get("/roll/:side", async(req, res) => {
+    try {
+        let side
+        req.params.side == "1" ? side = "ct" : side = "t";
+        const strat = await Strat.find({
+            $or: [{
+                side: side
+            }, {
+                side: "none"
+            }]
+        });
         const random = Math.floor(Math.random() * strat.length);
         if (strat[random].vars != {}) {
             strat[random].description = populateVars(strat[random]);
