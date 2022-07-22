@@ -10,6 +10,12 @@ router.get("/", async(req, res) => {
     const token = req.headers.authorization;
     try {
         const user = await User.findOne({ token: token });
+        if (!user) {
+            res.status(401).send({
+                message: "You are not logged in"
+            });
+            return
+        }
         res.status(200).send(user);
     } catch (err) {
         res.status(400).send(err);
