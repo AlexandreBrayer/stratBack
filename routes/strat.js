@@ -15,16 +15,6 @@ function populateVars(strat) {
 router.get("/", async(req, res) => {
     try {
         const strat = await Strat.find();
-        //if there is strats without side, then set side to none
-        for (let i = 0; i < strat.length; i++) {
-            if (!strat[i].side) {
-                strat[i].side = "none";
-            }
-        }
-        //save strats
-        for (let i = 0; i < strat.length; i++) {
-            await strat[i].save();
-        }
         res.status(200).send(strat);
     } catch (err) {
         res.status(400).send(err);
