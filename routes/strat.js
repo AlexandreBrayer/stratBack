@@ -23,7 +23,6 @@ router.get("/", async(req, res) => {
 
 
 router.get("/roll", async(req, res) => {
-    //send a random strat from the database
     try {
         const strat = await Strat.find();
         const random = Math.floor(Math.random() * strat.length);
@@ -38,8 +37,7 @@ router.get("/roll", async(req, res) => {
 
 router.get("/roll/:side", async(req, res) => {
     try {
-        let side
-        req.params.side == "1" ? side = "ct" : side = "t";
+        let side = req.params.side;
         const strat = await Strat.find({
             $or: [{
                 side: side
