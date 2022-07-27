@@ -26,7 +26,6 @@ router.post("/", async(req, res) => {
         login,
         password
     } = req.body;
-    //try to find by email OR login (which is name in database)
     try {
         const user = await User.findOne({
             $or: [{
