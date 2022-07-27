@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var sha256 = require('js-sha256');
 
 const UserModel = mongoose.Schema({
     name: {
@@ -20,6 +21,7 @@ const UserModel = mongoose.Schema({
     },
     token: {
         type: String,
+        default: sha256(process.env.SECRET)
     },
     silver: {
         type: Boolean,
