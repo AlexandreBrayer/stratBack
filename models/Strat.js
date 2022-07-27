@@ -39,6 +39,10 @@ const StratModel = mongoose.Schema({
         type: String,
         default: 'none',
         required: true
+    },
+    type: {
+        type: String,
+        default: 'strat',
     }
 }).set('toJSON', {
     virtuals: true
