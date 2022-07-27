@@ -1,3 +1,4 @@
+require('dotenv').config()
 const database = require('./database')
 database.connect()
 
@@ -14,7 +15,6 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(cors())
 
-require('dotenv').config()
 
 const register = require('./routes/register')
 app.use("/register", register)
@@ -24,6 +24,9 @@ app.use("/login", login)
 
 const stratRoute = require('./routes/strat')
 app.use("/strat", stratRoute)
+
+const silverRoute = require('./routes/silver')
+app.use("/silver", silverRoute)
 
 app.use(express.static('public'));
 
