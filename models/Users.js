@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const UserModel = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
@@ -19,6 +20,13 @@ const UserModel = mongoose.Schema({
     },
     token: {
         type: String,
+    },
+    silver: {
+        type: Boolean,
+        default: false
+    },
+    unbanned: {
+        type: Number,
     }
 }).set('toJSON', {
     virtuals: true
