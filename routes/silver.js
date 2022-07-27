@@ -6,7 +6,7 @@ var sha256 = require('js-sha256');
 router.get('/', async(req, res) => {
     const token = req.headers.authorization;
     try {
-        const user = await User.find({ token: token, silver: true });
+        const user = await User.find({ silver: true });
         if (!user) {
             res.status(401).send({
                 message: "You are not logged in"
